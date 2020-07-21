@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace CsharpTraining
@@ -285,23 +286,124 @@ namespace CsharpTraining
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static List<string> SplitString(string input)
+        public static List<string> SplitString(string input, char[] separators, string pattern, int nTimesDigitMax)
         {
-            List<string> stringList = new List<string>();
+            List<string> formatedList = new List<string>();
 
-            char[] separators = { ',', ';', ':', ' ' };
+            List<string> inputString = input.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            string[] splitedString = input.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-          
-            for (int i = 0; i < splitedString.Length; i++)
+            string aux = string.Empty;
+            int nTimesDigitAppear = 0;
+
+            for (int i = 0; i < inputString.Count; i++)
             {
-                if ((splitedString[i].EndsWith("abc") || splitedString[i].Contains("X")) && !splitedString[i].Contains("o"))
+                aux = inputString[i];
+
+                if ((EndsWithAbc(aux) || ContainsX(aux)) &&
+                    NoContainsO(aux) ||
+                    ContainsKIn3stPosition(aux))
                 {
-                        stringList.Add(splitedString[i]);                    
+                    string auxFormated = ToUpperLower(aux);
+
+                    formatedList.Add(auxFormated);
+
+                    if (ContainsDigit(aux))
+                        nTimesDigitAppear++;
+
+                    if (nTimesDigitAppear == nTimesDigitMax)
+                    {
+                        break;
+                    }
+
+                    if (ContainsEnd(aux, pattern))
+                    {
+                        break;
+                    }
+
+                    if (ContainsStart(aux, pattern))
+                    {
+                        break;
+                    }
+
                 }
             }
-           
-            return stringList;
+
+            return formatedList;
+        }
+
+
+
+        private static bool EndsWithAbc(string input)
+        {
+            return input.EndsWith("abc");
+        }
+
+        private static bool ContainsX(string input)
+        {
+            return input.Contains("X");
+        }
+
+        private static bool NoContainsO(string input)
+        {
+            return !input.Contains("o");
+        }
+
+        private static bool ContainsKIn3stPosition(string input)
+        {
+            return input.Contains("k") && input.IndexOf("k") > 2;
+        }
+
+        private static string ToUpperLower(string input)
+        {
+            string start = (input.Length >= 1)
+                ? input.Substring(0, 1).ToUpper()
+                : string.Empty;
+
+            string end = (input.Length >= 2)
+                ? input.Substring(input.Length - 1).ToLower()
+                : string.Empty;
+
+            string middle = (input.Length >= 3)
+                ? input.Substring(1, input.Length - 2)
+                : string.Empty;
+
+            string finalString = start + middle + end;
+
+            return finalString;
+        }
+
+        private static bool ContainsDigit(string input)
+        {
+            //Option 01
+            //return input.Any(char.IsDigit);
+
+            //Option 02
+            //var inputWithoutDigit =  input.Except(new List<char> { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+
+            //return !(inputWithoutDigit.Count() == input.Length);
+
+            // Option 03
+            foreach (var item in input)
+            {
+                if (item >= 48 && item <= 57)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ContainsEnd(string input, string pattern)
+        {
+            return input.Contains(pattern) && 
+                input.IndexOf(pattern) > 0 && 
+                input.IndexOf(pattern) < (input.Length - pattern.Length - 1);
+        }
+
+        private static bool ContainsStart(string input, string pattern)
+        {
+            return input.Contains(pattern) && input.IndexOf(pattern) == 0;
         }
     }
 }
