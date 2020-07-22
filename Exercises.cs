@@ -286,7 +286,13 @@ namespace CsharpTraining
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static List<string> SplitString(string input, char[] separators, string pattern, int nTimesDigitMax)
+        public static List<string> SplitString(
+            string input, 
+            char[] separators, 
+            string pattern1, 
+            string pattern2, 
+            int nTimesDigitMax, 
+            int nTimesStartMax)
         {
             List<string> formatedList = new List<string>();
 
@@ -294,6 +300,7 @@ namespace CsharpTraining
 
             string aux = string.Empty;
             int nTimesDigitAppear = 0;
+            int nTimesStartAppear = 0;
 
             for (int i = 0; i < inputString.Count; i++)
             {
@@ -303,10 +310,9 @@ namespace CsharpTraining
                     NoContainsO(aux) ||
                     ContainsKIn3stPosition(aux))
                 {
-                    string auxFormated = ToUpperLower(aux);
+                    formatedList.Add(ToUpperLower(aux));
 
-                    formatedList.Add(auxFormated);
-
+                    // FUSIONAR IN ONE 
                     if (ContainsDigit(aux))
                         nTimesDigitAppear++;
 
@@ -315,16 +321,16 @@ namespace CsharpTraining
                         break;
                     }
 
-                    if (ContainsEnd(aux, pattern))
+                    if (ContainsEnd(aux, pattern1))
                     {
-                        break;
-                    }
+                        if (ContainsStart(aux, pattern2))
+                            nTimesStartAppear++;
 
-                    if (ContainsStart(aux, pattern))
-                    {
-                        break;
+                        if (nTimesStartAppear == nTimesStartMax)
+                        {
+                            break;
+                        }
                     }
-
                 }
             }
 
@@ -396,14 +402,15 @@ namespace CsharpTraining
 
         private static bool ContainsEnd(string input, string pattern)
         {
-            return input.Contains(pattern) && 
+            return input.Contains(pattern) &&  
                 input.IndexOf(pattern) > 0 && 
                 input.IndexOf(pattern) < (input.Length - pattern.Length - 1);
         }
 
         private static bool ContainsStart(string input, string pattern)
         {
-            return input.Contains(pattern) && input.IndexOf(pattern) == 0;
+            return input.IndexOf(pattern) == 0;
         }
+
     }
 }
