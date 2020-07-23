@@ -287,11 +287,11 @@ namespace CsharpTraining
         /// <param name="input"></param>
         /// <returns></returns>
         public static List<string> SplitString(
-            string input, 
-            char[] separators, 
-            string pattern1, 
-            string pattern2, 
-            int nTimesDigitMax, 
+            string input,
+            char[] separators,
+            string pattern1,
+            string pattern2,
+            int nTimesDigitAppearMax,
             int nTimesStartMax)
         {
             List<string> formatedList = new List<string>();
@@ -312,32 +312,17 @@ namespace CsharpTraining
                 {
                     formatedList.Add(ToUpperLower(aux));
 
-                    // FUSIONAR IN ONE 
-                    if (ContainsDigit(aux))
-                        nTimesDigitAppear++;
-
-                    if (nTimesDigitAppear == nTimesDigitMax)
-                    {
+                    if (ContainsDigitNTimes(aux, ref nTimesDigitAppear, nTimesDigitAppearMax))
                         break;
-                    }
 
-                    if (ContainsEnd(aux, pattern1))
-                    {
-                        if (ContainsStart(aux, pattern2))
-                            nTimesStartAppear++;
-
-                        if (nTimesStartAppear == nTimesStartMax)
-                        {
-                            break;
-                        }
-                    }
+                    if (ContainsEnd(aux, pattern1) &&
+                        ContainsStartNTimes(aux, pattern2, ref nTimesStartAppear, nTimesStartMax))
+                        break;
                 }
             }
 
             return formatedList;
         }
-
-
 
         private static bool EndsWithAbc(string input)
         {
@@ -388,7 +373,7 @@ namespace CsharpTraining
 
             //return !(inputWithoutDigit.Count() == input.Length);
 
-            // Option 03
+            // Option 03 ACSII
             foreach (var item in input)
             {
                 if (item >= 48 && item <= 57)
@@ -400,10 +385,42 @@ namespace CsharpTraining
             return false;
         }
 
+        private static bool ContainsDigitNTimes(string input, ref int nTimesDigitAppear, int nTimesDigitAppearMax)
+        {
+            if (ContainsDigit(input))
+            {
+                nTimesDigitAppear++;
+                if (nTimesDigitAppear == nTimesDigitAppearMax)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ContainsStartNTimes(string aux, string pattern2, ref int nTimesStartAppear, int nTimesStartMax)
+        {
+            if (ContainsStart(aux, pattern2))
+            {
+                nTimesStartAppear++;
+
+                if (nTimesStartAppear == nTimesStartMax)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool ContainsEnd(string input, string pattern)
         {
-            return input.Contains(pattern) &&  
-                input.IndexOf(pattern) > 0 && 
+            if (pattern.Length > input.Length)
+                return false;
+
+            return input.Contains(pattern) &&
+                input.IndexOf(pattern) > 0 &&
                 input.IndexOf(pattern) < (input.Length - pattern.Length - 1);
         }
 
