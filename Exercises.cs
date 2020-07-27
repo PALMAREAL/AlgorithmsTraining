@@ -1,9 +1,7 @@
-﻿using System;
+﻿using CSharpTraining;
+using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
 
 namespace CsharpTraining
 {
@@ -163,6 +161,57 @@ namespace CsharpTraining
         }
 
         /// <summary>
+        /// Verify if the string is palindrome
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsPalindrome(string input)
+        {
+            // Option 01
+            //var inputReverse = input.Reverse().ToString();
+
+            //if (input == inputReverse)
+            //{
+            //    return true;
+            //}
+
+            //return false;
+
+            // Option 02
+            string inputReverse = string.Empty;
+
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                inputReverse += input[i];
+            }
+
+            if (input == inputReverse)
+            {
+                return true;
+            }
+
+            return false;
+
+            // Option 03
+
+            //string inputReverse = string.Empty;
+
+            //List<char> inputChars = input.ToList();
+
+            //for (int i = inputChars.Count - 1; i >= 0; i--)
+            //{
+            //    inputReverse += inputChars[i].ToString();
+            //}
+
+            //if (input == inputReverse)
+            //{
+            //    return true;
+            //}
+
+            //return false;
+        }
+
+        /// <summary>
         /// Sort ascendent values
         /// </summary>
         /// <param name="input"></param>
@@ -187,6 +236,30 @@ namespace CsharpTraining
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Get factorial of n
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int Factorial(int n)
+        {
+            int factorial = 1;
+
+            List<int> factorialNumbers = new List<int>();
+
+            for (int i = 1; i <= n; i++)
+            {
+                factorialNumbers.Add(i);
+            }
+
+            for (int i = 0; i < factorialNumbers.Count; i++)
+            {
+                factorial *= factorialNumbers[i];
+            }
+
+            return factorial;
         }
 
         private static void Swap(int[] values, int i, int j)
@@ -248,7 +321,7 @@ namespace CsharpTraining
         }
 
         /// <summary>
-        /// Dada una cadena de string separada por ";" devolver cuántas veces está repetido cada elemento en una lista.
+        /// Dada una cadena de string separada por "," devolver cuántas veces está repetido cada elemento en una lista.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -429,5 +502,174 @@ namespace CsharpTraining
             return input.IndexOf(pattern) == 0;
         }
 
+        /// <summary>
+        /// Return prime numbers from a List<int>
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static List<int> PrimeNumbers(List<int> input, int count)
+        {
+            List<int> primesNumbers = new List<int>();
+
+            int nPrimes = 0;
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (IsNumberPrime(input[i]))
+                {
+                    primesNumbers.Add(input[i]);
+
+                    nPrimes++;
+                    if (nPrimes == count)
+                        break;
+                }
+            }
+
+            return primesNumbers;
+        }
+
+        public static List<int> PrimeNumbers(List<int> input, int count, int max)
+        {
+            List<int> primesNumbers = new List<int>();
+
+            int nPrimes = 0;
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (IsNumberPrime(input[i]) && input[i] < max)
+                {
+                    primesNumbers.Add(input[i]);
+
+                    if (++nPrimes == count)
+                        break;
+
+                    // Option 01
+                    //if (input[i] < max)
+                    //{
+                    //    primesNumbers.Add(input[i]);
+
+                    //    if (++nPrimes == count)
+                    //        break;
+                    //}
+
+                    // Option 02
+                    //if (input[i] >= max) continue;
+
+                    //primesNumbers.Add(input[i]);
+
+                    //if (++nPrimes == count)
+                    //    break;
+                }
+            }
+
+            return primesNumbers;
+        }
+
+        private static bool IsNumberPrime(int number)
+        {
+            number = Math.Abs(number);
+
+            for (int i = number - 1; i > 1; i--)
+            {
+                if (number % i == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Calculate Max, Min and Average
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static Stadistic MaxMinAndAverage(List<int> input)
+        {
+            int max = input[0];
+            int min = input[0];
+            double average = 0;
+            int sum = 0;
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (input[i] > max)
+                    max = input[i];
+
+                if (input[i] < min)
+                    min = input[i];
+
+                sum += input[i];
+            }
+
+            average = (double)sum / input.Count;
+
+            return new Stadistic()
+            {
+                Max = max,
+                Min = min,
+                Average = average
+            };
+        }
+
+        public static Stadistic MaxMinAndAverage(IEnumerator<int> enumerator)
+        {
+            enumerator.MoveNext();
+            int max = enumerator.Current;
+            int min = enumerator.Current;
+            double average = 0;
+            int sum = enumerator.Current;
+            int count = 1;
+
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current > max)
+                    max = enumerator.Current;
+
+                if (enumerator.Current < min)
+                    min = enumerator.Current;
+
+                sum += enumerator.Current;
+
+                count++;
+            }
+
+            average = (double)sum / count;
+
+            return new Stadistic()
+            {
+                Max = max,
+                Min = min,
+                Average = average
+            };
+        }
+
+
+        /// <summary>
+        /// Verify if an array of integer contains one element repeated
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool VerifyRepeatedNumbers(int[] input)
+        {
+            int value = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (int j = 1; j < input.Length; j++)
+                {
+                    if (input[i] == input[j])
+                    {
+                        value = input[i];
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
+
+
