@@ -1,12 +1,65 @@
 ﻿using CSharpTraining;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Net.Http.Headers;
+using Xunit.Sdk;
 
 namespace CsharpTraining
 {
     public class Exercises
     {
+        /// <summary>
+        /// Verify if two strings are anagrams
+        /// </summary>
+        /// <param name="firstString"></param>
+        /// <param name="secondString"></param>
+        /// <returns></returns>
+        public static bool AreAnagram(string firstString, string secondString)
+        {
+            if ((firstString.Length != secondString.Length) ||
+                (firstString == secondString))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < firstString.Length; i++)
+            {
+                if (secondString.Contains(firstString[i]))
+                {
+                    //secondString = secondString.Replace(firstString[i].ToString(), string.Empty, StringComparison.InvariantCulture);
+                    secondString = secondString.Replace(firstString.Substring(i,1), string.Empty, StringComparison.InvariantCulture);
+                }
+            }
+
+            return secondString.Trim() == string.Empty;
+        }
+
+        /// <summary>
+        /// Verify repeteaded chars in string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool AreRepeteadedChars(string input)
+        {
+            string charsRepeteaded = string.Empty;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (int j = i + 1; j < input.Length; j++)
+                {
+                    if (input[i] == input[j])
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Return the sum of all numbers in an array
         /// </summary>
@@ -64,6 +117,35 @@ namespace CsharpTraining
 
             return result;
         }
+
+        /// <summary>
+        /// From a list of words return a list of palindrome
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static List<string> IsPalindromeList(List<string> input)
+        {
+            List<string> palindromesList = new List<string>();
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                for (int j = input[i].Length - 1; j >= 0; j--)
+                {
+
+                }
+            }
+
+
+
+
+
+
+
+            return palindromesList;
+        }
+
+
+
 
         /// <summary>
         /// Suma de los cuadrados de las posiciones pares
@@ -135,7 +217,6 @@ namespace CsharpTraining
             return maxValue;
         }
 
-
         /// <summary>
         /// Reverse the string
         /// </summary>
@@ -161,64 +242,13 @@ namespace CsharpTraining
         }
 
         /// <summary>
-        /// Verify if the string is palindrome
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static bool IsPalindrome(string input)
-        {
-            // Option 01
-            //var inputReverse = input.Reverse().ToString();
-
-            //if (input == inputReverse)
-            //{
-            //    return true;
-            //}
-
-            //return false;
-
-            // Option 02
-            string inputReverse = string.Empty;
-
-            for (int i = input.Length - 1; i >= 0; i--)
-            {
-                inputReverse += input[i];
-            }
-
-            if (input == inputReverse)
-            {
-                return true;
-            }
-
-            return false;
-
-            // Option 03
-
-            //string inputReverse = string.Empty;
-
-            //List<char> inputChars = input.ToList();
-
-            //for (int i = inputChars.Count - 1; i >= 0; i--)
-            //{
-            //    inputReverse += inputChars[i].ToString();
-            //}
-
-            //if (input == inputReverse)
-            //{
-            //    return true;
-            //}
-
-            //return false;
-        }
-
-        /// <summary>
         /// Sort ascendent values
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static int[] SortAscValues(int[] input)
         {
-            var length = input.Length;
+            int length = input.Length;
 
             int[] result = new int[length];
 
@@ -238,35 +268,47 @@ namespace CsharpTraining
             return result;
         }
 
-        /// <summary>
-        /// Get factorial of n
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public static int Factorial(int n)
-        {
-            int factorial = 1;
-
-            List<int> factorialNumbers = new List<int>();
-
-            for (int i = 1; i <= n; i++)
-            {
-                factorialNumbers.Add(i);
-            }
-
-            for (int i = 0; i < factorialNumbers.Count; i++)
-            {
-                factorial *= factorialNumbers[i];
-            }
-
-            return factorial;
-        }
-
         private static void Swap(int[] values, int i, int j)
         {
             int aux = values[i];
             values[i] = values[j];
             values[j] = aux;
+        }
+
+        /// <summary>
+        /// Get the char more repeated
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static List<Element> GetMostRepeatedCharAndMax(List<string> inputs)
+        {
+            return inputs.Select(x => GetMostRepeatedChar(x)).ToList();
+
+        }
+
+        /// <summary>
+        /// Get the char more repeated
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static Element GetMostRepeatedChar(string input)
+        {
+            char maxChar = ' ';
+            int maxCount = 0;
+            int tmpCount = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                tmpCount = input.Count(c => c == input[i]);
+
+                if ( tmpCount > maxCount)
+                {
+                    maxCount = tmpCount;
+                    maxChar = input[i];
+                }
+            }
+
+            return new Element(maxCount, maxChar);
         }
 
         /// <summary>
@@ -351,155 +393,6 @@ namespace CsharpTraining
             }
 
             return products;
-        }
-
-
-        /// <summary>
-        /// Return a List of strings with abc in the end of the string or X caracter string
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static List<string> SplitString(
-            string input,
-            char[] separators,
-            string pattern1,
-            string pattern2,
-            int nTimesDigitAppearMax,
-            int nTimesStartMax)
-        {
-            List<string> formatedList = new List<string>();
-
-            List<string> inputString = input.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-            string aux = string.Empty;
-            int nTimesDigitAppear = 0;
-            int nTimesStartAppear = 0;
-
-            for (int i = 0; i < inputString.Count; i++)
-            {
-                aux = inputString[i];
-
-                if ((EndsWithAbc(aux) || ContainsX(aux)) &&
-                    NoContainsO(aux) ||
-                    ContainsKIn3stPosition(aux))
-                {
-                    formatedList.Add(ToUpperLower(aux));
-
-                    if (ContainsDigitNTimes(aux, ref nTimesDigitAppear, nTimesDigitAppearMax))
-                        break;
-
-                    if (ContainsEnd(aux, pattern1) &&
-                        ContainsStartNTimes(aux, pattern2, ref nTimesStartAppear, nTimesStartMax))
-                        break;
-                }
-            }
-
-            return formatedList;
-        }
-
-        private static bool EndsWithAbc(string input)
-        {
-            return input.EndsWith("abc");
-        }
-
-        private static bool ContainsX(string input)
-        {
-            return input.Contains("X");
-        }
-
-        private static bool NoContainsO(string input)
-        {
-            return !input.Contains("o");
-        }
-
-        private static bool ContainsKIn3stPosition(string input)
-        {
-            return input.Contains("k") && input.IndexOf("k") > 2;
-        }
-
-        private static string ToUpperLower(string input)
-        {
-            string start = (input.Length >= 1)
-                ? input.Substring(0, 1).ToUpper()
-                : string.Empty;
-
-            string end = (input.Length >= 2)
-                ? input.Substring(input.Length - 1).ToLower()
-                : string.Empty;
-
-            string middle = (input.Length >= 3)
-                ? input.Substring(1, input.Length - 2)
-                : string.Empty;
-
-            string finalString = start + middle + end;
-
-            return finalString;
-        }
-
-        private static bool ContainsDigit(string input)
-        {
-            //Option 01
-            //return input.Any(char.IsDigit);
-
-            //Option 02
-            //var inputWithoutDigit =  input.Except(new List<char> { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' });
-
-            //return !(inputWithoutDigit.Count() == input.Length);
-
-            // Option 03 ACSII
-            foreach (var item in input)
-            {
-                if (item >= 48 && item <= 57)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool ContainsDigitNTimes(string input, ref int nTimesDigitAppear, int nTimesDigitAppearMax)
-        {
-            if (ContainsDigit(input))
-            {
-                nTimesDigitAppear++;
-                if (nTimesDigitAppear == nTimesDigitAppearMax)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool ContainsStartNTimes(string aux, string pattern2, ref int nTimesStartAppear, int nTimesStartMax)
-        {
-            if (ContainsStart(aux, pattern2))
-            {
-                nTimesStartAppear++;
-
-                if (nTimesStartAppear == nTimesStartMax)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool ContainsEnd(string input, string pattern)
-        {
-            if (pattern.Length > input.Length)
-                return false;
-
-            return input.Contains(pattern) &&
-                input.IndexOf(pattern) > 0 &&
-                input.IndexOf(pattern) < (input.Length - pattern.Length - 1);
-        }
-
-        private static bool ContainsStart(string input, string pattern)
-        {
-            return input.IndexOf(pattern) == 0;
         }
 
         /// <summary>
@@ -645,7 +538,6 @@ namespace CsharpTraining
             };
         }
 
-
         /// <summary>
         /// Verify if an array of integer contains one element repeated
         /// </summary>
@@ -653,23 +545,135 @@ namespace CsharpTraining
         /// <returns></returns>
         public static bool VerifyRepeatedNumbers(int[] input)
         {
-            int value = 0;
+            //Option 01
+            //for (int i = 0; i < input.Length; i++)
+            //{
+            //    for (int j = i + 1; j < input.Length; j++)
+            //    {
+            //        if (input[i] == input[j])
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+
+            //return false;
+
+            // Option 02
+
+            List<int> listNumbers = new List<int>();
 
             for (int i = 0; i < input.Length; i++)
             {
-                for (int j = 1; j < input.Length; j++)
+                if (listNumbers.Contains(input[i]))
                 {
-                    if (input[i] == input[j])
-                    {
-                        value = input[i];
-                        return true;
-                    }
+                    return true;
+                }
+                else
+                {
+                    listNumbers.Add(input[i]);
                 }
             }
 
             return false;
         }
+
+        /// <summary>
+        /// Verify if the string is palindrome
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsPalindrome(string input)
+        {
+            /*Option 01
+            var inputReverse = input.Reverse().ToString();
+
+            return (input == inputReverse)
+                 */
+
+            // Option 02
+            //string inputReverse = string.Empty;
+
+            //for (int i = input.Length - 1; i >= 0; i--)
+
+            //    inputReverse += input[i];
+
+            //return (input == inputReverse);
+
+            // Option 03
+
+            for (int i = 0; i < input.Length / 2; i++)
+            {
+                if (input[i] != input[input.Length - 1 - i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get factorial of n
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        //public static int Factorial(int n)
+        //{
+        //    //Option 01
+
+        //    if (n <= 0)
+        //        return 0;
+
+        //    int factorial = 1;
+
+        //    for (int i = 1; i <= n; i++)
+        //        factorial *= i;
+
+        //    return factorial;
+        //}
+
+        public static int Factorial(int n)
+        {
+            //Option 01 una línea
+
+            return (n == 1)
+                ? 1
+                : n * Factorial(n - 1);
+
+            //Option 02
+            //if (n == 1)
+            //    return 1;
+            //else
+            //    return n * Factorial2(n - 1);
+
+            //int factorial = 1;
+
+            //for (int i = 1; i <= n; i++)
+            //    factorial *= i;
+
+            //return factorial;
+        }
+
+        /// <summary>
+        /// RemoveDuplicateChar from input string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string RemoveDuplicateChar(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (int j = i + 1; j < input.Length; j++)
+                {
+                    if (input[i] == input[j])
+                    {
+                        input = input.Remove(j, 1);
+                    }
+                }
+            }
+
+            return input;
+        }
     }
 }
-
-
