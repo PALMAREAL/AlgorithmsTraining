@@ -123,26 +123,21 @@ namespace CsharpTraining
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static List<string> IsPalindromeList(List<string> input)
-        {
-            List<string> palindromesList = new List<string>();
+        //public static List<string> IsPalindromeList(List<string> input)
+        //{
+        //    List<string> palindromesList = new List<string>();
 
-            for (int i = 0; i < input.Count; i++)
-            {
-                for (int j = input[i].Length - 1; j >= 0; j--)
-                {
+        //    for (int i = 0; i < input.Count; i++)
+        //    {
+        //        for (int j = input[i].Length - 1; j >= 0; j--)
+        //        {
 
-                }
-            }
-
-
+        //        }
+        //    }
 
 
-
-
-
-            return palindromesList;
-        }
+        //    return palindromesList;
+        //}
 
 
 
@@ -275,6 +270,11 @@ namespace CsharpTraining
             values[j] = aux;
         }
 
+
+
+
+
+
         /// <summary>
         /// Get the char more repeated
         /// </summary>
@@ -310,6 +310,36 @@ namespace CsharpTraining
 
             return new Element(maxCount, maxChar);
         }
+
+
+        /// <summary>
+        /// Move the zeros to the end of an Array
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] MoveZerosToEnd(int[] input)
+        {
+            List<int> inputList = new List<int>();
+            List<int> number = new List<int>();
+            
+            inputList.AddRange(input);
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == 0)
+                {
+                    number.Add(input[i]);
+                    inputList.Remove(input[i]);
+                }
+            }
+
+            inputList.AddRange(number);
+
+
+            return inputList.ToArray(); 
+        }
+
+
 
         /// <summary>
         /// Return a List of negative numbers and other with positive numbers where all absolute value bigger than (n).
@@ -674,6 +704,58 @@ namespace CsharpTraining
             }
 
             return input;
+        }
+
+        /// <summary>
+        /// Swap min and max from an int Array
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] SwapMinAndMax(int[] input)
+        {
+            int[] result = new int[input.Length];
+
+            int max = input.Max();
+            int min = input.Min();
+
+            int indexOfMax = 0;
+            int indexOfMin = 0;
+
+            input.CopyTo(result, 0);
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == max)
+                {
+                    indexOfMax = i;
+                }
+
+                if (input[i] == min)
+                {
+                    indexOfMin = i;
+                }
+            }
+
+            SwapMinMax(result, indexOfMin, indexOfMax);
+
+            return result;
+        }
+
+        private static void SwapMinMax(int[] result, int indexOfMin, int indexOfMax)
+        {
+            int aux = result[indexOfMin];
+            result[indexOfMin] = result[indexOfMax];
+            result[indexOfMax] = aux;
+        }
+
+        /// <summary>
+        /// Given a pivot rotate the array
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] RotateArray(int[] input)
+        {
+            throw new NotImplementedException();
         }
     }
 }
