@@ -306,11 +306,6 @@ namespace CsharpTraining
             return new Element(maxCount, maxChar);
         }
 
-
-
-
-
-
         /// <summary>
         /// Return a List of negative numbers and other with positive numbers where all absolute value bigger than (n).
         /// Implement with object
@@ -740,9 +735,9 @@ namespace CsharpTraining
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static int[] MoveZerosToEnd(int[] input, int value)
+        public static int[] MoveValueToEnd(int[] input, int value)
         {
-            //Option 01
+            ////Option 01
             //List<int> inputList = new List<int>();
             //List<int> number = new List<int>();
 
@@ -762,7 +757,7 @@ namespace CsharpTraining
             //return inputList.ToArray();
 
 
-            //Option 02          
+            ////Option 02          
 
             //List<int> inputList = new List<int>();
 
@@ -779,14 +774,254 @@ namespace CsharpTraining
 
             //return inputList.ToArray();
 
-            //Option 03
+            ////Option 03
 
-            var arrayValue = Array.FindAll(input, x=>x == value);
+            //var arrayValue = Array.FindAll(input, x => x == value);
 
-            input = input.Except(new int[] { value }).ToArray();
+            //input = input.Except(new int[] { value }).ToArray();
 
-            int[] result = input.Concat(arrayValue).ToArray();
+            //int[] result = input.Concat(arrayValue).ToArray();
 
+
+            //return result;
+
+
+            ////Option 04
+
+            //int count = 0;
+
+            //int[] result = new int[input.Length];
+
+            //for (int i = 0; i < input.Length; i++)
+            //{
+            //    if (input[i] != value)
+            //    {
+            //        input[count++] = input[i];
+
+            //    }
+            //}
+
+            //while (count < input.Length)
+            //{
+            //    input[count++] = 0;
+            //}
+
+            //input.CopyTo(result, 0);
+
+            //return result;
+
+            //Option 05
+
+            int[] result = new int[input.Length];
+
+            int count = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] != value)
+                {
+                    result[count++] = input[i];
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Delete an element from Array
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] DeleteElement(int[] input, int index)
+        {
+            int length = input.Length;
+
+            int count = 0;
+
+            int[] result = new int[length - 1];
+
+            if (input == null
+                || index < 0
+                || index >= length)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+
+            else
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    if (i != index)
+                    {
+                        result[count++] = input[i];
+                    }
+                }
+            }
+
+           return result;
+        }
+
+        /// <summary>
+        /// Add element in index
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="index"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static int[] AddElementInIndex(int[] input, int index, int element)
+        {
+           
+            int length = input.Length;
+
+            int count = 0;
+
+            int[] result = new int[length + 1];
+
+            if (input == null 
+                || index < 0 
+                || index >= length)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+
+            else
+            {
+                //Option 01
+                //for (int i = 0; i < index; i++)
+                //{
+                //    result[count++] = input[i];
+                //    result[index] = element;
+                //}
+
+                //for (int i = index; i < length; i++)
+                //{
+                //    result[count++ + 1] = input[i];
+                //}
+
+                //Option 02
+                //for (int i = 0; i < index; i++)
+                //{
+                //    result[count++] = input[i];
+                //    result[index] = element;
+                //}
+
+                //for (int i = length - 1; i >= index; i--)
+                //{
+                //    result[i+1] = input[i];
+                //}
+
+                //Option 03
+
+                for (int i = 0; i < length; i++)
+                {
+                    if (i < index)
+                    {
+                        result[count++] = input[i];
+                    }
+
+                    else if (i >= index)
+                    {
+                        result[i + 1] = input[i];
+                    }
+                }
+
+                result[index] = element;
+            }
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Get the number of Upper Case from a string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int GetNumberOfUpperCase(string input)
+        {
+            int result = 0;
+
+            int count = 0;
+
+            if (input == null)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+
+            else
+            {
+                foreach (var item in input)
+                {
+                    if (item >= 65 && item <= 90)
+                        count++;
+                }
+
+                result = count;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sort even and odd numbers in array
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] SortEvenAndOddNumbers(int[] input)
+        {
+            int[] result = new int[input.Length];
+
+            int count = 0;
+
+            int lastIndex = input.Length - 1;
+
+            if (input == null)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+            else
+            {
+                for (int i = 0; i < input.Length; i++)
+                {
+                    if (input[i] % 2 == 0)
+                        result[count++] = input[i];
+                }
+
+                for (int i = input.Length - 1; i >= 0; i--)
+                {
+                    if (input[i] % 2 != 0)
+                        result[lastIndex--] = input[i];
+                }
+            }
+
+
+            return result;
+        }
+
+        /// <summary>
+        /// Select and create a new array with the rightmost digits 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] RightMostDigit(int[] input)
+        {
+            int[] result = new int[input.Length];
+
+            int count = 0;
+
+            if (input == null)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+
+            else
+            {
+                for (int i = 0; i < input.Length; i++)
+                {
+                    int lastIndex = input[i].ToString().Length - 1 ;
+                    char [] number = input[i].ToString().ToCharArray();
+                    result[count++] = (int)Char.GetNumericValue(number[lastIndex]);
+                }
+            }
 
             return result;
         }
