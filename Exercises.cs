@@ -44,8 +44,6 @@ namespace CsharpTraining
         /// <returns></returns>
         public static bool AreRepeteadedChars(string input)
         {
-            string charsRepeteaded = string.Empty;
-
             for (int i = 0; i < input.Length; i++)
             {
                 for (int j = i + 1; j < input.Length; j++)
@@ -356,6 +354,8 @@ namespace CsharpTraining
 
             return result;
         }
+
+
 
         /// <summary>
         /// Dada una cadena de string separada por "," devolver cuántas veces está repetido cada elemento en una lista.
@@ -712,7 +712,7 @@ namespace CsharpTraining
             {
                 if (input[i] < min)
                     min = input[i];
-           
+
                 if (input[i] > max)
                     max = input[i];
             }
@@ -858,7 +858,7 @@ namespace CsharpTraining
                 }
             }
 
-           return result;
+            return result;
         }
 
         /// <summary>
@@ -870,15 +870,15 @@ namespace CsharpTraining
         /// <returns></returns>
         public static int[] AddElementInIndex(int[] input, int index, int element)
         {
-           
+
             int length = input.Length;
 
             int count = 0;
 
             int[] result = new int[length + 1];
 
-            if (input == null 
-                || index < 0 
+            if (input == null
+                || index < 0
                 || index >= length)
             {
                 throw new ArgumentException("The input must be valid");
@@ -927,7 +927,7 @@ namespace CsharpTraining
 
                 result[index] = element;
             }
-            
+
             return result;
         }
 
@@ -998,6 +998,33 @@ namespace CsharpTraining
         }
 
         /// <summary>
+        /// Return true if are two numbers continuos and equal
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool AreContinuosAndEquals(int[] input)
+        {
+            int index = input.Length - 1;
+
+            if (input == null
+                || input.Length < 2)
+            {
+                throw new ArgumentException("The input must be valid");
+            }
+
+            else
+            {
+                for (int i = 0; i < input.Length; i++)
+                {
+                    if (i < index && input[i] == input[i + 1])
+                        return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Select and create a new array with the rightmost digits 
         /// </summary>
         /// <param name="input"></param>
@@ -1017,8 +1044,8 @@ namespace CsharpTraining
             {
                 for (int i = 0; i < input.Length; i++)
                 {
-                    int lastIndex = input[i].ToString().Length - 1 ;
-                    char [] number = input[i].ToString().ToCharArray();
+                    int lastIndex = input[i].ToString().Length - 1;
+                    char[] number = input[i].ToString().ToCharArray();
                     result[count++] = (int)Char.GetNumericValue(number[lastIndex]);
                 }
             }
