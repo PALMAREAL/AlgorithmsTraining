@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Text;
 using Xunit.Sdk;
 
 namespace CsharpTraining
@@ -136,9 +137,6 @@ namespace CsharpTraining
 
         //    return palindromesList;
         //}
-
-
-
 
         /// <summary>
         /// Suma de los cuadrados de las posiciones pares
@@ -354,8 +352,6 @@ namespace CsharpTraining
 
             return result;
         }
-
-
 
         /// <summary>
         /// Dada una cadena de string separada por "," devolver cuántas veces está repetido cada elemento en una lista.
@@ -700,8 +696,6 @@ namespace CsharpTraining
                 }
             }
 
-
-
             return input;
             */
             //Option 02
@@ -836,10 +830,6 @@ namespace CsharpTraining
         {
             int length = input.Length;
 
-            int count = 0;
-
-            int[] result = new int[length - 1];
-
             if (input == null
                 || index < 0
                 || index >= length)
@@ -847,22 +837,22 @@ namespace CsharpTraining
                 throw new ArgumentException("The input must be valid");
             }
 
-            else
+            int count = 0;
+
+            int[] result = new int[length - 1];
+
+            for (int i = 0; i < length; i++)
             {
-                for (int i = 0; i < length; i++)
-                {
-                    if (i != index)
-                    {
-                        result[count++] = input[i];
-                    }
-                }
+                ////Option 01
+                if (i != index)
+                    result[count++] = input[i];
             }
 
             return result;
         }
 
         /// <summary>
-        /// Add element in index
+        /// Insert an element in Array by index
         /// </summary>
         /// <param name="input"></param>
         /// <param name="index"></param>
@@ -870,12 +860,7 @@ namespace CsharpTraining
         /// <returns></returns>
         public static int[] AddElementInIndex(int[] input, int index, int element)
         {
-
             int length = input.Length;
-
-            int count = 0;
-
-            int[] result = new int[length + 1];
 
             if (input == null
                 || index < 0
@@ -884,49 +869,28 @@ namespace CsharpTraining
                 throw new ArgumentException("The input must be valid");
             }
 
-            else
+            int[] result = new int[length + 1];
+
+            //Option 01
+            //for (int i = 0; i < index; i++)
+            //    result[i] = input[i];
+
+            //result[index] = element;
+
+            //for (int i = index + 1 ; i <= length; i++)
+            //    result[i] = input[i - 1];
+
+            //Option 02
+
+            for (int i = 0; i < length; i++)
             {
-                //Option 01
-                //for (int i = 0; i < index; i++)
-                //{
-                //    result[count++] = input[i];
-                //    result[index] = element;
-                //}
-
-                //for (int i = index; i < length; i++)
-                //{
-                //    result[count++ + 1] = input[i];
-                //}
-
-                //Option 02
-                //for (int i = 0; i < index; i++)
-                //{
-                //    result[count++] = input[i];
-                //    result[index] = element;
-                //}
-
-                //for (int i = length - 1; i >= index; i--)
-                //{
-                //    result[i+1] = input[i];
-                //}
-
-                //Option 03
-
-                for (int i = 0; i < length; i++)
-                {
-                    if (i < index)
-                    {
-                        result[count++] = input[i];
-                    }
-
-                    else if (i >= index)
-                    {
-                        result[i + 1] = input[i];
-                    }
-                }
-
-                result[index] = element;
+                if (i < index)
+                    result[i] = input[i];
+                else
+                    result[i + 1] = input[i];
             }
+
+            result[index] = element;
 
             return result;
         }
@@ -938,27 +902,18 @@ namespace CsharpTraining
         /// <returns></returns>
         public static int GetNumberOfUpperCase(string input)
         {
-            int result = 0;
+            if (input == null)
+                throw new ArgumentException("The input must be valid");
 
             int count = 0;
 
-            if (input == null)
+            foreach (var item in input)
             {
-                throw new ArgumentException("The input must be valid");
+                if (item >= 65 && item <= 90)
+                    count++;
             }
 
-            else
-            {
-                foreach (var item in input)
-                {
-                    if (item >= 65 && item <= 90)
-                        count++;
-                }
-
-                result = count;
-            }
-
-            return result;
+            return count;
         }
 
         /// <summary>
@@ -968,29 +923,26 @@ namespace CsharpTraining
         /// <returns></returns>
         public static int[] SortEvenAndOddNumbers(int[] input)
         {
+            if (input == null)
+                throw new ArgumentException("The input must be valid");
+
             int[] result = new int[input.Length];
 
             int count = 0;
 
             int lastIndex = input.Length - 1;
 
-            if (input == null)
+            //Option 01
+            for (int i = 0; i < input.Length; i++)
             {
-                throw new ArgumentException("The input must be valid");
+                if (input[i] % 2 == 0)
+                    result[count++] = input[i];
             }
-            else
-            {
-                for (int i = 0; i < input.Length; i++)
-                {
-                    if (input[i] % 2 == 0)
-                        result[count++] = input[i];
-                }
 
-                for (int i = input.Length - 1; i >= 0; i--)
-                {
-                    if (input[i] % 2 != 0)
-                        result[lastIndex--] = input[i];
-                }
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                if (input[i] % 2 != 0)
+                    result[lastIndex--] = input[i];
             }
 
 
@@ -1011,12 +963,19 @@ namespace CsharpTraining
             {
                 throw new ArgumentException("The input must be valid");
             }
-
             else
             {
-                for (int i = 0; i < input.Length; i++)
+                //Option 1
+                //for (int i = 0; i < input.Length; i++)
+                //{
+                //    if (i < index && input[i] == input[i + 1])
+                //        return true;
+                //}
+
+                //Option 2
+                for (int i = 0; i < index; i++)
                 {
-                    if (i < index && input[i] == input[i + 1])
+                    if (input[i] == input[i + 1])
                         return true;
                 }
 
@@ -1025,29 +984,23 @@ namespace CsharpTraining
         }
 
         /// <summary>
-        /// Select and create a new array with the rightmost digits 
+        /// Create a new array with the rightmost digits from other array
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static int[] RightMostDigit(int[] input)
         {
+            if (input == null)
+                throw new ArgumentException("The input must be valid");
+
             int[] result = new int[input.Length];
 
             int count = 0;
 
-            if (input == null)
+            foreach (var item in input)
             {
-                throw new ArgumentException("The input must be valid");
-            }
-
-            else
-            {
-                for (int i = 0; i < input.Length; i++)
-                {
-                    int lastIndex = input[i].ToString().Length - 1;
-                    char[] number = input[i].ToString().ToCharArray();
-                    result[count++] = (int)Char.GetNumericValue(number[lastIndex]);
-                }
+                char rightNumber = item.ToString().Last();
+                result[count++] = (int)Char.GetNumericValue(rightNumber);
             }
 
             return result;
