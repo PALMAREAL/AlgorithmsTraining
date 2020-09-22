@@ -386,6 +386,8 @@ namespace CsharpTraining
             return products;
         }
 
+
+
         /// <summary>
         /// Return prime numbers from a List<int>
         /// </summary>
@@ -411,6 +413,8 @@ namespace CsharpTraining
 
             return primesNumbers;
         }
+
+
 
         public static List<int> PrimeNumbers(List<int> input, int count, int max)
         {
@@ -1002,6 +1006,176 @@ namespace CsharpTraining
                 char rightNumber = item.ToString().Last();
                 result[count++] = (int)Char.GetNumericValue(rightNumber);
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Insert an array in the index
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int[] InsertArray( int[] baseArray, int[] inputArray, int index)
+        {
+            if ( baseArray == null
+                || inputArray == null
+                || index < 0
+                || index >= baseArray.Length)
+            {
+                throw new ArgumentException("The inputs must be valid");
+            }
+
+            int newArrayLength = baseArray.Length + inputArray.Length;
+
+            int[] newArray = new int[newArrayLength];
+
+            // Option 01
+            //for (int i = 0; i < index; i++)
+            //    newArray[i] = baseArray[i];
+
+            //for (int i = baseArrayIndex; i >= index; i--)
+            //    newArray[newArrayIndex--] = baseArray[i];
+
+            //for (int i = 0; i < inputArray.Length; i++)
+            //    newArray[index++] = inputArray[i];
+
+
+            // Option 02
+
+            //for (int i = 0; i < index; i++)
+            //    newArray[i] = baseArray[i];            
+
+            //for (int i = index; i < index + inputArray.Length; i++)
+            //    newArray[i] = inputArray[i - index];
+
+            //for (int i = index + inputArray.Length; i < newArray.Length; i++)
+            //    newArray[i] = baseArray[i - inputArray.Length];
+
+
+            // Option 03
+            for (int i = 0; i < baseArray.Length + inputArray.Length; i++)
+            {
+                if (i < index)
+                    newArray[i] = baseArray[i];
+
+                else if (i < (index + inputArray.Length))
+                    newArray[i] = inputArray[i - index];
+
+                else 
+                    newArray[i] = baseArray[i - inputArray.Length];
+            }
+
+            return newArray;
+        }
+
+        /// <summary>
+        /// Displace array n positions 
+        /// </summary>
+        /// <param name="baseArray"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int[] DisplaceArray(int[] baseArray, int n)
+        {
+            if (baseArray == null 
+                || n < 0)
+                throw new ArgumentException("The inputs must be valid");
+
+            if (n >= baseArray.Length 
+                && n % baseArray.Length == 0)
+                return baseArray;
+
+            int[] result = new int[baseArray.Length];
+
+            result[0] = baseArray[baseArray.Length - n];
+
+            result[n] = baseArray[0];
+
+            //result[baseArray.Length - n - 1] = baseArray[n];
+
+            result[baseArray.Length - 1] = baseArray[baseArray.Length - n - 1];
+
+            return result;
+        }
+
+        /// <summary>
+        /// Rotate an array from a pivot
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="pivot"></param>
+        /// <returns></returns>
+        public static string[] RotateByPivot(string[] array, int pivot)
+        {
+            if (array == null
+                || !array.Any()
+                || pivot < 0
+                || pivot > array.Length - 1)
+                throw new ArgumentException("The inputs must be valid");
+
+            if (pivot == array.Length - 1 
+                || pivot == 0)
+                return array;
+
+            int length = array.Length;
+
+            int lastIndex = length - 1;
+
+            int count = length - pivot;
+
+            string[] result = new string[length];
+
+            for (int i = 0; i < lastIndex - pivot; i++)
+                result[i] = array[i + pivot + 1];
+
+            result[lastIndex - pivot] = array[pivot];
+
+            for (int i = 0; i < pivot; i++)
+                result[count++] = array[i];
+
+            return result;
+        }
+
+        /// <summary>
+        /// Rotate an array from a pivot with queue
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="pivot"></param>
+        /// <returns></returns>
+        public static string[] RotateByPivotQueue(string[] array, int pivot)
+        {
+            if (array == null
+                || !array.Any()
+                || pivot < 0
+                || pivot > array.Length - 1)
+                throw new ArgumentException("The inputs must be valid");
+
+            if (pivot == array.Length - 1
+                || pivot == 0)
+                return array;
+
+            int length = array.Length;
+
+            int count = length - pivot;
+
+            Queue<string> prePivotElements = new Queue<string>(); 
+
+            Queue<string> postPivotElements = new Queue<string>(); 
+
+            string[] result = new string[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                if (i == pivot) continue;
+                if (i < pivot)
+                    prePivotElements.Enqueue(array[i]);
+                else  
+                    postPivotElements.Enqueue(array[i]);
+            }
+
+            postPivotElements.CopyTo(result, 0);
+
+            prePivotElements.CopyTo(result, count);
+
+            result[count - 1] = array[pivot];
 
             return result;
         }
